@@ -13,18 +13,18 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeormStore } from 'connect-typeorm';
 import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
-import { DataSource } from 'typeorm';
-import { Session } from './auth/entities/session.entity';
-import { MainModule } from './main/main.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { NextFunction, Request, Response } from 'express';
-import { MailerModule } from './mailer/mailer.module';
+import * as session from 'express-session';
+import helmet from 'helmet';
 import mailerConfog from 'mailer/config/mailer.confog';
 import { randomBytes } from 'node:crypto';
-import helmet from 'helmet';
+import { DataSource } from 'typeorm';
+import { Session } from './auth/entities/session.entity';
+import { MailerModule } from './mailer/mailer.module';
+import { MainModule } from './main/main.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,6 +57,8 @@ import helmet from 'helmet';
     AuthModule,
     MainModule,
     MailerModule,
+
+    // WARN: do not remove this comments injected_module;
   ],
   controllers: [AppController],
   providers: [AppService],

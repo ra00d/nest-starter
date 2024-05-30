@@ -43,16 +43,16 @@ async function bootstrap() {
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
   app.setViewEngine('hbs');
   hbs.localsAsTemplateData(app);
-  var blocks = {};
+  const blocks = {};
   hbs.registerHelper('extend', function (name, context) {
-    var block = blocks[name];
+    let block = blocks[name];
     if (!block) {
       block = blocks[name] = [];
     }
     block.push(context.fn(this)); // for older versions of handlebars, use block.push(context(this));
   });
   hbs.registerHelper('block', function (name) {
-    var val = (blocks[name] || []).join('\n');
+    const val = (blocks[name] || []).join('\n');
     blocks[name] = [];
     return val;
   });

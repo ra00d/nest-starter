@@ -1,0 +1,9 @@
+---
+inject: true
+before: "injected_module"
+skip_if: TestAppModule
+to: src/app.module.ts
+sh: pnpm format
+---
+
+//TestAppModule,
