@@ -1,0 +1,14 @@
+---
+to: src/database/migrations/<%=timestamp%>-<%= name %>.ts
+---
+import { MigrationInterface, QueryRunner } from "typeorm";
+
+export class <%= h.inflection.titleize(name) %><%=timestamp%> implements MigrationInterface {
+
+    public async up(queryRunner: QueryRunner): Promise<void> {
+    }
+
+    public async down(queryRunner: QueryRunner): Promise<void> {
+    }
+
+}

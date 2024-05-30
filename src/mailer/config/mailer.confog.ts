@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { MailmanOptions } from '@squareboat/nest-mailman';
-import { GenericMail } from '../../../resources/views/mail';
+import { GenericMail } from 'mailer/resources/views/mail';
 
 export default registerAs(
   'mailman',

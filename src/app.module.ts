@@ -33,7 +33,7 @@ import helmet from 'helmet';
       load: [mailerConfog],
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', '..', 'web', 'dist'),
+      rootPath: join(__dirname, '..', '..', 'web', 'dist'),
       serveRoot: '/control',
     }),
     I18nModule.forRoot({
@@ -41,7 +41,7 @@ import helmet from 'helmet';
       logging: true,
       disableMiddleware: false,
       loaderOptions: {
-        path: join(__dirname, '..', '..', 'i18n'),
+        path: join(__dirname, 'i18n'),
 
         watch: true,
       },

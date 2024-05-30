@@ -12,6 +12,7 @@ import { AuthFilter } from './common/filter/auth/auth.filter';
 import { ValidationError } from 'class-validator';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: ['warn', 'error', 'fatal'],
     cors: {
       origin: 'http://localhost:5173',
       credentials: true,
@@ -38,8 +39,8 @@ async function bootstrap() {
     ],
   });
   app.useStaticAssets(join(__dirname, '..', '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, '..', '..', 'views'));
-  hbs.registerPartials(join(__dirname, '..', '..', 'views', 'partials'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
   app.setViewEngine('hbs');
   hbs.localsAsTemplateData(app);
   var blocks = {};

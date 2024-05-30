@@ -13,6 +13,11 @@
         "include": "../resources/**/*",
         "outDir": "dist/resources",
         "watchAssets": true
+      },
+
+      {
+        "include": "i18n/**/*",
+        "watchAssets": true
       }
     ]
   }
