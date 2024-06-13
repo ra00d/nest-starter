@@ -1,0 +1,8 @@
+---
+inject: true
+to: src/jobs/jobs.module.ts
+after: "imported_services"
+skip_if: import { <%= h.changeCase.title(name) %>Service } from './<%= h.changeCase.lower(name) %>.service'
+---
+
+import { <%= h.changeCase.title(name) %>Service } from './<%= h.changeCase.lower(name) %>.service'

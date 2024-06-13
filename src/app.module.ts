@@ -25,6 +25,7 @@ import { DataSource } from 'typeorm';
 import { Session } from './auth/entities/session.entity';
 import { MailerModule } from './mailer/mailer.module';
 import { MainModule } from './main/main.module';
+import { JobsModule } from 'jobs/jobs.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -57,6 +58,8 @@ import { MainModule } from './main/main.module';
     AuthModule,
     MainModule,
     MailerModule,
+
+    JobsModule,
 
     // WARN: do not remove this comments injected_module;
   ],

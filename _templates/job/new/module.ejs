@@ -1,0 +1,7 @@
+---
+inject: true
+after: "injected_service"
+to : src/jobs/jobs.module.ts
+skip_if: <%= h.changeCase.title(name) %>Service,
+---
+<%= h.changeCase.title(name) %>Service,

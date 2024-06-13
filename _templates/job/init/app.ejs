@@ -1,0 +1,8 @@
+---
+inject: true
+before: "injected_module"
+skip_if: JobsModule
+to: src/app.module.ts
+sh: pnpm format
+---
+JobsModule

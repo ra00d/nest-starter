@@ -1,0 +1,18 @@
+---
+to: src/jobs/jobs.module.ts
+sh: pnpm format
+---
+import { Global, Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+// NOTE: do not remove next line
+// imported_services
+
+
+@Global()
+@Module({
+	imports:[ ScheduleModule.forRoot()],
+providers:[
+// injected_service
+]
+	})
+export class JobsModule{}
