@@ -26,6 +26,7 @@ export const AppDataSource = new DataSource({
 
 		subscribersDir: "subscriber",
 	},
+
 	// extra: {
 	//   // based on https://node-postgres.com/api/pool
 	//   // max connection pool size
