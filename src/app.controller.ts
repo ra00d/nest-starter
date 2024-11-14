@@ -1,16 +1,17 @@
-import { Controller, Get, Render, Res } from '@nestjs/common';
+import { Controller, Get, Post, Render, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { Setting } from 'main/settings/entities/setting.entity';
+import { Setting } from 'api/settings/entities/setting.entity';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { EntityManager } from 'typeorm';
 import { Public } from './auth/decorators/public.decorator';
 import { navItems } from './constants/frontend/nav-items.constants';
+import { MailService } from 'mail/mail.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly db: EntityManager,
-    // private mailer: TestmailService,
+    private mailer: MailService,
   ) {}
 
   @Get()
@@ -18,7 +19,7 @@ export class AppController {
   @Render('index')
   async getHello(@I18n() i18n: I18nContext) {
     const settings = await this.db.findOne(Setting, { where: { id: 1 } });
-    const data = settings.settings;
+    const data = settings?.settings;
     const lang = i18n.lang;
     return {
       title: 'Home',
@@ -29,8 +30,9 @@ export class AppController {
       ...data,
       about:
         lang === 'ar'
-          ? settings.settings.aboutUsAr
-          : settings.settings.aboutUsEn,
+          ? settings?.settings.aboutUsAr || '    -'
+          : settings?.settings.aboutUsEn || '   -',
+      // layout: 'layouts/main',
     };
   }
   @Get('/en')
@@ -44,12 +46,22 @@ export class AppController {
     res.cookie('lang', 'ar');
     res.redirect('/');
   }
+  @Get('/login')
+  @Render('login')
+  async loginPage() {
+    return {
+      layout: '',
+    };
+  }
   // NOTE: test email
-  // @Post('mail')
-  // async sendMail() {
-  //   await this.mailer.send();
-  //   return {
-  //     msg: 'mail sent',
-  //   };
-  // }
+  @Post('mail')
+  async sendMail() {
+    await this.mailer.sendEmailVerification(
+      'ra0.0adn@gmail.com',
+      'd8a397d6-3bb0-4a51-9610-51c50497414e',
+    );
+    return {
+      msg: 'mail sent',
+    };
+  }
 }

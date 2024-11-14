@@ -19,19 +19,20 @@ import * as cookieParser from 'cookie-parser';
 import { NextFunction, Request, Response } from 'express';
 import * as session from 'express-session';
 import helmet from 'helmet';
-import mailerConfog from 'mailer/config/mailer.confog';
 import { randomBytes } from 'node:crypto';
 import { DataSource } from 'typeorm';
 import { Session } from './auth/entities/session.entity';
-import { MailerModule } from './mailer/mailer.module';
-import { MainModule } from './main/main.module';
+import { ApiModule } from './api/api.module';
 import { JobsModule } from 'jobs/jobs.module';
+import { MailModule } from 'mail/mail.module';
+import appConfig from 'config/app.config';
+import mailerConfig from 'mail/config/mailer.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,
-      load: [mailerConfog],
+      load: [appConfig, mailerConfig],
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'web', 'dist'),
@@ -53,11 +54,13 @@ import { JobsModule } from 'jobs/jobs.module';
         new HeaderResolver(['X-Lang', 'accept-language']),
       ],
       viewEngine: 'hbs',
+      typesOutputPath: join(__dirname, '../src/generated/i18n.generated.ts'),
     }),
+    MailModule,
     DatabaseModule,
     AuthModule,
-    MainModule,
-    MailerModule,
+
+    ApiModule,
 
     JobsModule,
 
