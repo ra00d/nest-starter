@@ -14,19 +14,20 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 
 import { ServeStaticModule } from '@nestjs/serve-static';
+import appConfig from 'config/app.config';
 import { TypeormStore } from 'connect-typeorm';
 import * as cookieParser from 'cookie-parser';
 import { NextFunction, Request, Response } from 'express';
 import * as session from 'express-session';
-import helmet from 'helmet';
+import { JobsModule } from 'jobs/jobs.module';
+import mailerConfig from 'mail/config/mailer.config';
+import { MailModule } from 'mail/mail.module';
 import { randomBytes } from 'node:crypto';
 import { DataSource } from 'typeorm';
-import { Session } from './auth/entities/session.entity';
+import { ViteDevServer } from 'vite';
 import { ApiModule } from './api/api.module';
-import { JobsModule } from 'jobs/jobs.module';
-import { MailModule } from 'mail/mail.module';
-import appConfig from 'config/app.config';
-import mailerConfig from 'mail/config/mailer.config';
+import { Session } from './auth/entities/session.entity';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,10 +35,20 @@ import mailerConfig from 'mail/config/mailer.config';
       expandVariables: true,
       load: [appConfig, mailerConfig],
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'web', 'dist'),
-      serveRoot: '/control',
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', '..', 'web', 'dist'),
+    //   serveRoot: '/control',
+    // }),
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, 'client'),
+        serveRoot: '/assets',
+      },
+      {
+        rootPath: join(__dirname, 'public'),
+        serveRoot: '/',
+      },
+    ),
     I18nModule.forRoot({
       fallbackLanguage: 'ar',
       logging: true,
@@ -73,9 +84,20 @@ export class AppModule implements NestModule {
   constructor(
     private readonly dataSource: DataSource,
     private readonly configService: ConfigService,
+    // private readonly web: WebService,
   ) {}
 
-  configure(consumer: MiddlewareConsumer) {
+  async configure(consumer: MiddlewareConsumer) {
+    let vite: ViteDevServer;
+    if (process.env.NODE_ENV !== 'production') {
+      const { createServer } = await import('vite');
+      vite = await createServer({
+        server: { middlewareMode: true, port: 3001 },
+        appType: 'custom',
+        base: '/',
+      });
+    }
+    // this.web.setVite(vite);
     consumer
       .apply(
         cookieParser(this.configService.get('SESSION_SECRET')),
@@ -102,26 +124,27 @@ export class AppModule implements NestModule {
           res.locals.cspNonce = randomBytes(32).toString('hex');
           next();
         },
-        helmet({
-          crossOriginResourcePolicy: {
-            policy: 'same-site',
-          },
-          contentSecurityPolicy: {
-            useDefaults: false,
-            directives: {
-              defaultSrc: ["'self'"],
-              scriptSrc: [
-                "'self'",
-                (_req, res: Response) => `'nonce-${res.locals.cspNonce}'`,
-              ],
-              styleSrc: ["'self'", "'unsafe-inline'"],
-
-              imgSrc: ["'self'", 'data:'],
-              fontSrc: ["'self'"],
-              connectSrc: ["'self'"],
-            },
-          },
-        }),
+        // helmet({
+        //   crossOriginResourcePolicy: {
+        //     policy: 'same-site',
+        //   },
+        //   contentSecurityPolicy: {
+        //     useDefaults: false,
+        //     directives: {
+        //       defaultSrc: ["'self'"],
+        //       scriptSrc: [
+        //         "'self'",
+        //         (_req, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+        //       ],
+        //       styleSrc: ["'self'", "'unsafe-inline'"],
+        //
+        //       imgSrc: ["'self'", 'data:'],
+        //       fontSrc: ["'self'"],
+        //       connectSrc: ["'self'"],
+        //     },
+        //   },
+        // }),
+        vite?.middlewares || undefined,
         // passport.initialize({}),
         // passport.session({
         //   pauseStream: true,

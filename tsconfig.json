@@ -18,13 +18,19 @@
 		"strictBindCallApply": false,
 		"forceConsistentCasingInFileNames": false,
 		"noFallthroughCasesInSwitch": false,
-		"typeRoots": [
-			"node_modules/@types",
-			"../../node_modules/@types",
-			"src/@types"
-		]
-		// "paths": {
-		// 	"auth/*": "src/auth/*"
-		// }
-	}
+		// "typeRoots": [
+		// 	"node_modules/@types",
+		// 	"../../node_modules/@types",
+		// 	"src/@types",
+		// 	"node_modules/.pnpm/@types*"
+		// ],
+		"paths": {
+			"@/*": [
+				"../client/react/*"
+			]
+		}
+	},
+	// "exclude": [
+	// 	"client"
+	// ]
 }

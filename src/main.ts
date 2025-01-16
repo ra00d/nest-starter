@@ -25,6 +25,10 @@ async function bootstrap() {
         method: RequestMethod.ALL,
       },
       {
+        path: '/admin*',
+        method: RequestMethod.ALL,
+      },
+      {
         path: '/login',
         method: RequestMethod.GET,
       },
@@ -43,9 +47,10 @@ async function bootstrap() {
     ],
   });
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.setBaseViewsDir(join(__dirname, 'views'));
-  hbs.registerPartials(join(__dirname, 'views', 'partials'));
-  app.setViewEngine('hbs');
+  app.setBaseViewsDir(join(__dirname, '..', 'client', 'views'));
+  hbs.registerPartials(join(__dirname, '..', 'client', 'views', 'partials'));
+  app.setViewEngine('html');
+  app.engine('html', hbs.__express);
   app.set('view options', {
     layout: 'layouts/main',
   });

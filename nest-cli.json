@@ -8,13 +8,12 @@
   "compilerOptions": {
     "manualRestart": true,
     "deleteOutDir": true,
-    "watchAssets": true,
     "assets": [
       {
         "include": "i18n/**/*",
         "watchAssets": true
       },
-      { "include": "**/*.hbs", "watchAssets": true }
+      { "include": "resource/**/*", "watchAssets": true }
     ]
   }
 }
